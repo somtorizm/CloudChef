@@ -4,6 +4,7 @@ import android.Manifest
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,36 +32,16 @@ fun RequestPermissions() {
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         permissionStates.permissions.forEach { permissionState ->
             when (permissionState.permission) {
                 Manifest.permission.CAMERA -> {
-                    HandleCameraPermissionState(permissionState)
+
                 }
             }
-        }
-    }
-}
-
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-fun HandleCameraPermissionState(permissionState: PermissionState) {
-    when {
-        permissionState.status.isGranted -> {
-            Text(text = "Camera permission granted")
-        }
-        !permissionState.status.isGranted -> {
-            if (permissionState.status.shouldShowRationale) {
-                Text(text = "Camera permission is needed")
-            } else {
-                Text(text = "Navigate to settings and enable the Camera permission")
-            }
-        }
-        else -> {
-            Text(text = "Permission status unknown")
         }
     }
 }

@@ -17,6 +17,7 @@ class BarCodeAnalyser(
     private var lastAnalyzedTimeStamp = 0L
 
     override fun analyze(image: ImageProxy) {
+
         val currentTimestamp = System.currentTimeMillis()
         if (currentTimestamp - lastAnalyzedTimeStamp >= TimeUnit.SECONDS.toMillis(1)) {
             image.image?.let { imageToAnalyze ->
@@ -24,8 +25,7 @@ class BarCodeAnalyser(
                     .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
                     .build()
                 val barcodeScanner = BarcodeScanning.getClient(options)
-                val imageToProcess =
-                    InputImage.fromMediaImage(imageToAnalyze, image.imageInfo.rotationDegrees)
+                val imageToProcess = InputImage.fromMediaImage(imageToAnalyze, image.imageInfo.rotationDegrees)
 
                 barcodeScanner.process(imageToProcess)
                     .addOnSuccessListener { barcodes ->
@@ -37,6 +37,7 @@ class BarCodeAnalyser(
                     }
                     .addOnFailureListener { exception ->
                         Log.d("TAG", "BarcodeAnalyser: Something went wrong $exception")
+
                     }
                     .addOnCompleteListener {
                         image.close()
