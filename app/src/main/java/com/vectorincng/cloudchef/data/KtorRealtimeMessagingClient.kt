@@ -56,7 +56,7 @@ class KtorRealtimeMessagingClient(private val client: HttpClient): RealTimeMessa
         }
     }
 
-    override suspend fun sendAction(action: MakeTurn) {
+    override suspend fun sendAction(action: String) {
         session?.outgoing?.send(
             Frame.Text("make_turn#${Json.encodeToString(action)}")
         )

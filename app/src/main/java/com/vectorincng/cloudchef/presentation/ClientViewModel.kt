@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.vectorincng.cloudchef.data.MessageState
 import com.vectorincng.cloudchef.data.RealTimeMessagingClient
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,22 +58,6 @@ class ClientViewModel @Inject constructor(
                 }
                 .collect()
         }
-    }
-
-    fun retryConnecting() {
-        if (!isConnecting.value && showConnectionError.value) {
-            startCollectingAppState()
-        }
-    }
-
-    fun networkDisconnected() {
-        viewModelScope.launch {
-            client.closeConnection()
-        }
-    }
-
-    fun updateIsConnecting(newValue: Boolean) {
-        _isConnecting.value = newValue
     }
 
     override fun onCleared() {

@@ -8,13 +8,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import com.vectorincng.cloudchef.data.MessageState
 
+
 @Composable
-fun GameField(
+fun AppUI(
+    status: Boolean,
     state: MessageState,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier.fillMaxWidth()) {
+        ConnectivityStatus(isConnecting = status)
         Text(text = state.messageData ?: "", fontSize = 25.sp)
-
     }
 }
+
+
