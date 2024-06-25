@@ -47,6 +47,7 @@ class KtorRealtimeMessagingClient(private val client: HttpClient): RealTimeMessa
                         }
                 } catch (e: Exception) {
                     println("WebSocket connection failed: ${e.message}")
+                    trySend(MessageState("WebSocket connection failed: ${e.message}")).isSuccess
                     delay(5000)
                 } finally {
                     session?.close(CloseReason(CloseReason.Codes.NORMAL, "WebSocket session closed"))
