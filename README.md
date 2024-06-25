@@ -56,7 +56,6 @@ Welcome to the Client App! This repository contains a basic Android application 
 1. **Clone the Repository**:
     ```bash
     git clone https://github.com/somtorizm/CloudChef.git
-    cd client-app
     ```
 
 2. **Android Application**:
