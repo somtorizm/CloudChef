@@ -74,6 +74,19 @@ class MainActivity : ComponentActivity() {
                             Spacer(modifier = Modifier.height(100.dp))
 
                             Text(
+                                text = "DEVICE CONNECTED TO WEBSOCKET SERVER",
+                                fontSize = 16.sp,
+                                fontStyle = FontStyle.Italic
+                            )
+
+                            Text(
+                                text = state.connectedUsers.size.toString(),
+                                fontSize = 15.sp,
+                            )
+
+                            Spacer(modifier = Modifier.height(100.dp))
+
+                            Text(
                                 text = state.messageData ?: "",
                                 fontSize = 15.sp,
                             )
