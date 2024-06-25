@@ -74,6 +74,31 @@ dependencies {
     kapt libs.androidx.hilt.compiler
     implementation libs.androidx.hilt.navigation.compose
 
+    //ML-Bar Code
+    implementation libs.barcode.scanning
+
+    // CameraX
+    def camerax_version = "1.0.2"
+    implementation libs.androidx.camera.core
+    implementation libs.androidx.camera.camera2
+    implementation libs.androidx.camera.lifecycle
+    implementation libs.androidx.camera.view
+
+    implementation libs.accompanist.flowlayout
+
+    implementation(libs.coil.compose)
+
+    implementation(libs.coil.gif)
+
+    //Barcode
+    implementation libs.barcode.scanning
+
+    //Camera Permission
+    implementation libs.accompanist.permissions
+
+    //lottie
+    implementation (libs.lottie.compose)
+
     // Compose
     implementation libs.androidx.lifecycle.viewmodel.compose
 

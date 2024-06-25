@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.vectorincng.cloudchef.camera.CameraPreview
+import com.vectorincng.cloudchef.camera.RequestPermissions
 import com.vectorincng.cloudchef.presentation.ClientViewModel
 import com.vectorincng.cloudchef.presentation.ConnectivityStatus
 import com.vectorincng.cloudchef.ui.theme.CloudChefTheme
@@ -27,6 +29,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CloudChefTheme {
+
+                RequestPermissions()
+
                 val viewModel = hiltViewModel<ClientViewModel>()
                 val state by viewModel.state.collectAsState()
                 val isConnecting by viewModel.isConnecting.collectAsState()
@@ -38,8 +43,11 @@ class MainActivity : ComponentActivity() {
 
                     Column(
                         modifier = Modifier
-                            .padding(top = 35.dp).align(Alignment.Center)
+                            .padding(top = 35.dp)
+                            .align(Alignment.Center)
                     ) {
+                        CameraPreview()
+
                         Text(text = state.messageData ?: "", fontSize = 15.sp)
                     }
                 }
