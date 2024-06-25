@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.launch
-import java.net.ConnectException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,9 +27,6 @@ class ClientViewModel @Inject constructor(
 
     private val _isConnecting = MutableStateFlow(false)
     val isConnecting: StateFlow<Boolean> = _isConnecting
-
-    private val _showConnectionError = MutableStateFlow(false)
-    val showConnectionError: StateFlow<Boolean> = _showConnectionError
 
     private var appStateJob: Job? = null
 
@@ -51,10 +47,6 @@ class ClientViewModel @Inject constructor(
                 .retryWhen { cause, attempt ->
                     delay(5000)
                     true
-                }
-                .catch { t ->
-                    println("${t.message} error")
-                    _showConnectionError.value = (t is ConnectException)
                 }
                 .collect()
         }
