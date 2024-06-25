@@ -1,5 +1,9 @@
 package com.vectorincng.cloudchef
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkRequest
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -30,6 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -39,30 +44,38 @@ class MainActivity : ComponentActivity() {
                 val state by viewModel.state.collectAsState()
                 val isConnecting by viewModel.isConnecting.collectAsState()
                 val showConnectionError by viewModel.showConnectionError.collectAsState()
+                val connectivityManager =
+                    this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-                Log.d("Hello", state.connectedUsers.size.toString())
-
-                if(showConnectionError) {
-                    Box(modifier = Modifier.fillMaxSize(),
+                if (showConnectionError) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(text = "Couldn't Connect to the server", color = MaterialTheme.colorScheme.error)
+                        Text(
+                            text = "Couldn't Connect to the server",
+                            color = MaterialTheme.colorScheme.error
+                        )
                     }
                     return@CloudChefTheme
                 }
 
-                Box(modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
 
-                    Column(modifier = Modifier
-                        .padding(top = 35.dp)
-                        .align(Alignment.TopEnd)) {
+                    Column(
+                        modifier = Modifier
+                            .padding(top = 35.dp)
+                            .align(Alignment.TopEnd)
+                    ) {
 
 
                         GameField(state = state, modifier = Modifier.fillMaxWidth())
                     }
 
-                    if(isConnecting) {
+                    if (isConnecting) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -73,23 +86,45 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
+
+
+                val networkRequest = NetworkRequest.Builder().build()
+                connectivityManager.registerNetworkCallback(
+                    networkRequest,
+                    object : ConnectivityManager.NetworkCallback() {
+                        override fun onAvailable(network: Network) {
+                            super.onAvailable(network)
+                            viewModel.updateIsConnecting(false)
+                            viewModel.retryConnecting()
+                        }
+
+                        override fun onLost(network: Network) {
+                            super.onLost(network)
+                            viewModel.updateIsConnecting(true)
+                            viewModel.networkDisconnected()
+                        }
+                    }
+                )
+
             }
+        }
+    }
+
+
+    @Composable
+    fun Greeting(name: String, modifier: Modifier = Modifier) {
+        Text(
+            text = "Hello $name!",
+            modifier = modifier
+        )
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    fun GreetingPreview() {
+        CloudChefTheme {
+            Greeting("Android")
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CloudChefTheme {
-        Greeting("Android")
-    }
-}
