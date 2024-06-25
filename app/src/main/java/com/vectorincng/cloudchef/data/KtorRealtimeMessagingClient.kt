@@ -20,13 +20,13 @@ import kotlinx.serialization.json.Json
 class KtorRealtimeMessagingClient(private val client: HttpClient): RealTimeMessagingClient {
     private var session : WebSocketSession? = null
 
-    override fun getAppStateStream(): Flow<AppState> {
+    override fun getAppStateStream(): Flow<MessageState> {
         return flow {
           session = client.webSocketSession {
              url("ws://192.168.1.23:8080/play")
           }
             val appState = session!!.incoming.consumeAsFlow().filterIsInstance<Frame.Text>()
-                .mapNotNull { Json.decodeFromString<AppState>( it.readText()) }
+                .mapNotNull { Json.decodeFromString<MessageState>( it.readText()) }
 
             emitAll(appState)
         }

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.vectorincng.cloudchef.presentation.ClientViewModel
 import com.vectorincng.cloudchef.presentation.GameField
@@ -42,7 +40,7 @@ class MainActivity : ComponentActivity() {
                 val isConnecting by viewModel.isConnecting.collectAsState()
                 val showConnectionError by viewModel.showConnectionError.collectAsState()
 
-                Log.d("Hello", state.connectedPlayer.size.toString())
+                Log.d("Hello", state.connectedUsers.size.toString())
 
                 if(showConnectionError) {
                     Box(modifier = Modifier.fillMaxSize(),
@@ -60,38 +58,8 @@ class MainActivity : ComponentActivity() {
                         .padding(top = 35.dp)
                         .align(Alignment.TopEnd)) {
 
-                        if(!state.connectedPlayer.contains('X')) {
-                            Text(text = "Waiting for player X",
-                                fontSize = 25.sp)
-                        } else if (!state.connectedPlayer.contains('O')) {
-                            Text(text = "Waiting for player O",
-                                fontSize = 25.sp)
-                        }
 
-                        if(state.connectedPlayer.size == 2 && state.winningPlayer == null && !state.isBoardFull) {
-                            Text(
-                                text = if(state.playerAtTurn == 'X') {
-                                    "X is next"
-                                } else "O is next",
-                                fontSize = 32.sp,
-                            )
-                        }
-
-                        GameField(state = state, onTapInField = viewModel::finishTurn, modifier = Modifier.fillMaxWidth())
-                    }
-
-                    if(state.isBoardFull || state.winningPlayer != null) {
-                        Text(
-                            text = when(state.winningPlayer) {
-                                'X' -> "Player X won!"
-                                'O' -> "Player O won!"
-                                else -> "It's a draw!"
-                            },
-                            fontSize = 32.sp,
-                            modifier = Modifier
-                                .padding(bottom = 32.dp)
-                                .align(Alignment.BottomCenter)
-                        )
+                        GameField(state = state, modifier = Modifier.fillMaxWidth())
                     }
 
                     if(isConnecting) {

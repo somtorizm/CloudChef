@@ -2,8 +2,8 @@ package com.vectorincng.cloudchef.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vectorincng.cloudchef.data.AppState
 import com.vectorincng.cloudchef.data.MakeTurn
+import com.vectorincng.cloudchef.data.MessageState
 import com.vectorincng.cloudchef.data.RealTimeMessagingClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,7 +29,7 @@ class ClientViewModel @Inject constructor(
     }.catch { t ->
         println(t.message.toString() + "error")
         _showConnectionError.value = t is ConnectException
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AppState())
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), MessageState())
 
     private val _isConnecting = MutableStateFlow(false)
     val isConnecting = _isConnecting.asStateFlow()
@@ -37,15 +37,6 @@ class ClientViewModel @Inject constructor(
     private val _showConnectionError = MutableStateFlow(false)
     val showConnectionError = _showConnectionError.asStateFlow()
 
-   fun finishTurn(x: Int, y: Int) {
-       if(state.value.field[x][y] != null || state.value.winningPlayer != null) {
-           return
-       }
-
-       viewModelScope.launch {
-           client.sendAction(MakeTurn(x,y))
-       }
-   }
 
     override fun onCleared() {
         super.onCleared()
